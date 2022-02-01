@@ -35,15 +35,17 @@ db.once('open', () => {
 const app = express();
 const path = require('path');
 
+const secret = process.env.SECRET || 'SenhaMuitoForte12345!!';
+
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    secret: 'SenhaMuitoForte12345!!',
+    secret,
     touchAfter: 24 * 60 * 60
 });
 
 const sessionConfig = {
     store,
-    secret: 'SenhaMuitoForte12345!!',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -101,6 +103,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err });
 });
 
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log('Servidor rodando na porta ', port);
 });
